@@ -1,4 +1,4 @@
-import { prop as Property, getModelForClass, ReturnModelType } from '@typegoose/typegoose'
+import { prop as Property } from '@typegoose/typegoose'
 import { getOptimisticModel } from '../core'
 import { BaseDocument } from '../interfaces/BaseDocument'
 
