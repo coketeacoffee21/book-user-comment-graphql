@@ -1,7 +1,8 @@
 import 'reflect-metadata'
 import { ApolloServer } from 'apollo-server'
-import { connect } from 'mongoose'
+
 import { ObjectId } from 'mongodb'
+import { Container } from 'typedi'
 import * as path from 'path'
 import { buildSchema } from 'type-graphql'
 
@@ -18,8 +19,8 @@ const MONGO_DB_URL = 'mongodb://localhost:27017/type-graphql'
 
 async function bootstrap() {
   try {
-    const mongoose = await connect(MONGO_DB_URL)
-    const defaultUser = await seedDatabase()
+    // await mongoose.connect(MONGO_DB_URL)
+    // const defaultUser = await seedDatabase()
     // build TypeGraphQL executable schema
     const schema = await buildSchema({
       resolvers: [UserResolver, BookResolver, CommentResolver],
@@ -27,6 +28,7 @@ async function bootstrap() {
       globalMiddlewares: [],
       scalarsMap: [{ type: ObjectId, scalar: ObjectIdScalar }],
       validate: false,
+      container: Container,
     })
 
     // create mocked context

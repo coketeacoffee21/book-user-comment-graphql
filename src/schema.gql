@@ -3,22 +3,7 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
-type Book {
-  author: String!
-  id: ID!
-  name: String!
-  publishDate: String!
-}
-
-type Comment {
-  author: String!
-  content: String!
-  id: ID!
-}
-
 type Query {
-  books: [Book!]!
-  comments: [Comment!]!
   users: [User!]!
 }
 

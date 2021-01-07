@@ -1,7 +1,5 @@
-import { Types } from 'mongoose'
-
 export abstract class BaseDocument {
-  readonly _id: Types.ObjectId
+  readonly _id: any
   readonly updatedAt: Date
   readonly createdAt: Date
   /**

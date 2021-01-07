@@ -8,6 +8,17 @@ export class UserResolver {
   @Query(() => [UserS])
   async users(): Promise<UserS[]> {
     const userlist = await UserModel.find({})
-    return userlist
+    UserModel.findByIdAndDelete
+    UserModel.findById
+    UserModel.findByIdAndDelete
+    // return userlist
+    console.log('userlist', userlist)
+    return [
+      {
+        id: 'asd',
+        name: '123',
+        avatar: 'qwe',
+      },
+    ]
   }
 }
