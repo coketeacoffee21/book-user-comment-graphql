@@ -1,7 +1,7 @@
 import { ID, Field, ObjectType } from 'type-graphql'
 
 @ObjectType()
-export class User {
+export class User implements Record<string, any> {
   @Field(() => ID)
   id: string
 
@@ -10,4 +10,8 @@ export class User {
 
   @Field()
   avatar: string
+
+  constructor(private convertible: Record<keyof User, User[keyof User]>) {
+    Object.assign(this, convertible)
+  }
 }
