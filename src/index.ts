@@ -21,7 +21,7 @@ const MONGO_DB_URL = 'mongodb://localhost:27017/type-graphql'
 async function bootstrap() {
   try {
     await mongoose.connect(MONGO_DB_URL)
-    // const defaultUser = await seedDatabase()
+    const defaultUser = await seedDatabase()
     // build TypeGraphQL executable schema
     const schema = await buildSchema({
       resolvers: [UserResolver, BookResolver, CommentResolver],

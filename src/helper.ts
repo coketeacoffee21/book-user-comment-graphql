@@ -1,3 +1,4 @@
+import { BookModel } from './entities/book'
 import { User, UserModel } from './entities/user'
 
 export async function seedDatabase(): Promise<User> {
@@ -5,8 +6,13 @@ export async function seedDatabase(): Promise<User> {
     name: 'test',
     avatar: 'MichalLytek',
   } as User)
-  const abcd = await defaultUser.save()
-  console.log('abcd', abcd)
+  const createdUser = await defaultUser.save()
 
+  const defaultBook = new BookModel({
+    name: 'iambook',
+    authorId: createdUser._id,
+    publishDate: 'asdf',
+  })
+  const createdBook = await defaultBook.save()
   return defaultUser
 }
