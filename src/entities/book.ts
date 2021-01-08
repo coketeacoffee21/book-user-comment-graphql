@@ -1,4 +1,5 @@
 import { prop as Property } from '@typegoose/typegoose'
+import { Types } from 'mongoose'
 import { getOptimisticModel } from '../core'
 import { BaseDocument } from '../interfaces/BaseDocument'
 
@@ -7,7 +8,7 @@ export class Book extends BaseDocument {
   name: string
 
   @Property({ required: true })
-  author: string
+  authorId: Types.ObjectId
 
   @Property({ required: true })
   publishDate: string

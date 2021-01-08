@@ -10,4 +10,8 @@ export class Comment {
 
   @Field()
   author: string
+
+  constructor(private convertible: Record<keyof Comment, Comment[keyof Comment]>) {
+    Object.assign(this, convertible)
+  }
 }
