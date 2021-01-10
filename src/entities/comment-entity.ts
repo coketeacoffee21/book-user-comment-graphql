@@ -3,7 +3,7 @@ import { Types } from 'mongoose'
 import { getOptimisticModel } from '../core'
 import { BaseDocument } from '../interfaces/BaseDocument'
 
-export class Comment extends BaseDocument {
+export class CommentEntity extends BaseDocument {
   @Property({ required: true })
   content: string
 
@@ -14,4 +14,4 @@ export class Comment extends BaseDocument {
   bookId: Types.ObjectId
 }
 
-export const CommentModel = getOptimisticModel(Comment)
+export const CommentModel = getOptimisticModel(CommentEntity)

@@ -1,13 +1,17 @@
 import { prop as Property } from '@typegoose/typegoose'
+import { Types } from 'mongoose'
 import { getOptimisticModel } from '../core'
 import { BaseDocument } from '../interfaces/BaseDocument'
 
-export class User extends BaseDocument {
+export class BookEntity extends BaseDocument {
   @Property({ required: true })
   name: string
 
   @Property({ required: true })
-  avatar: string
+  authorId: Types.ObjectId
+
+  @Property({ required: true })
+  publishDate: string
 }
 
-export const UserModel = getOptimisticModel(User)
+export const BookModel = getOptimisticModel(BookEntity)

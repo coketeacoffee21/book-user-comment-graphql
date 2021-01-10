@@ -1,12 +1,10 @@
-import { CommentModel } from './entities'
-import { BookModel } from './entities/book'
-import { User, UserModel } from './entities/user'
+import { UserEntity, UserModel, CommentModel, BookModel } from './entities'
 
-export async function seedDatabase(): Promise<User> {
+export async function seedDatabase(): Promise<UserEntity> {
   const defaultUser = new UserModel({
     name: 'some nice name',
     avatar: 'random',
-  } as User)
+  })
   const createdUser = await defaultUser.save()
 
   const defaultBook = new BookModel({

@@ -1,6 +1,5 @@
 import { Types } from 'mongoose'
 import { ID, Field, ObjectType } from 'type-graphql'
-import { User } from '../entities/user'
 
 export type Ref<T> = T | Types.ObjectId
 

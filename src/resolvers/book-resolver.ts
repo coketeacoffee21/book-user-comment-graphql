@@ -1,6 +1,6 @@
 import { Resolver, Query, Arg, FieldResolver, Root, Int } from 'type-graphql'
-import { UserModel, BookModel, CommentModel, Book } from '../entities'
-import { Book as BookS, User as UserS, Comment as CommentS } from '../schemas/'
+import { UserModel, BookModel, CommentModel } from '../entities'
+import { Book, User, Comment } from '../schemas/'
 import { SORT_BY, SORT_ORDER } from '../enum'
 
 function notNullorUndefined(it: any) {
@@ -24,9 +24,9 @@ async function findUserIdsBy(toMatch: Record<string, string | undefined>) {
   }
 }
 
-@Resolver(() => BookS)
+@Resolver(() => Book)
 export class BookResolver {
-  @Query(() => [BookS]!)
+  @Query(() => [Book]!)
   async listBooks(
     @Arg('skip', () => Int, { defaultValue: 0 }) skip: number,
     @Arg('limit', () => Int, { defaultValue: 20 }) limit: number,
@@ -35,7 +35,7 @@ export class BookResolver {
     @Arg('bookName', { nullable: true }) bookName?: string,
     @Arg('authorName', { nullable: true }) authorName?: string,
     @Arg('keyword', { nullable: true }) keyword?: string,
-  ): Promise<BookS[]> {
+  ): Promise<Book[]> {
     const userIds = await findUserIdsBy({ keyword, authorName })
     const bookConds = [
       userIds.length ? { authorId: { $in: userIds } } : null,
@@ -48,14 +48,16 @@ export class BookResolver {
       .limit(limit)
       .lean()
 
-    return books.map(it => new BookS({ ...it, id: it._id }))
+    console.log('books', books)
+
+    return books.map(it => new Book({ ...it, id: it._id }))
   }
 
-  @Query(() => BookS, { nullable: true })
-  async getBook(@Arg('id') id: string): Promise<BookS | null> {
+  @Query(() => Book, { nullable: true })
+  async getBook(@Arg('id') id: string): Promise<Book | null> {
     const bookC = await BookModel.findById(id).lean()
     const books = bookC
-      ? new BookS({
+      ? new Book({
           ...bookC,
           id: bookC._id,
         })
@@ -63,20 +65,20 @@ export class BookResolver {
     return books
   }
 
-  @FieldResolver(() => UserS, { nullable: true })
-  async author(@Root() book: BookS): Promise<UserS | null> {
+  @FieldResolver(() => User, { nullable: true })
+  async author(@Root() book: Book): Promise<User | null> {
     const user = await UserModel.findById(book.authorId).lean()
     return user
-      ? new UserS({
+      ? new User({
           ...user,
           id: user._id,
         })
       : null
   }
 
-  @FieldResolver(() => [CommentS]!)
-  async comments(@Root() book: BookS): Promise<CommentS[]> {
+  @FieldResolver(() => [Comment]!)
+  async comments(@Root() book: Book): Promise<Comment[]> {
     const comments = await CommentModel.find({ bookId: book.id }).lean()
-    return comments.map(it => new CommentS({ ...it, id: it._id }))
+    return comments.map(it => new Comment({ ...it, id: it._id }))
   }
 }

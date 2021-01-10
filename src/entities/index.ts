@@ -1,3 +1,3 @@
-export * from './book'
-export * from './user'
-export * from './comment'
+export * from './book-entity'
+export * from './user-entity'
+export * from './comment-entity'
