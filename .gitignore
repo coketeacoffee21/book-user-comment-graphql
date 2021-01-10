@@ -124,3 +124,6 @@ test.js
 
 
 !csv/**
+
+dist
+src/schema.gql
