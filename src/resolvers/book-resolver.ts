@@ -81,4 +81,9 @@ export class BookResolver {
     const comments = await CommentModel.find({ bookId: book.id }).lean()
     return comments.map(it => new Comment({ ...it, id: it._id }))
   }
+
+  @FieldResolver(() => Int)
+  async numComments(@Root() book: Book): Promise<number> {
+    return await CommentModel.countDocuments({ bookId: book.id })
+  }
 }
