@@ -12,8 +12,7 @@ export class Book implements Record<string, any> {
   @Field()
   name: string
 
-  @Field(type => ID)
-  authorId: string | Types.ObjectId
+  authorId: Types.ObjectId
 
   @Field()
   publishDate: string

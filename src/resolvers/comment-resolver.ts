@@ -1,13 +1,20 @@
-import { Resolver, Query } from 'type-graphql'
+import { Resolver, Query, FieldResolver, Root } from 'type-graphql'
+import { UserModel } from '../entities'
 
-import { CommentModel } from '../entities/comment'
-import { Comment as CommentS } from '../schemas/comment'
+import { User as UserS, Comment as CommentS } from '../schemas'
 
 @Resolver(() => CommentS)
 export class CommentResolver {
-  // @Query(() => [CommentS])
-  // async comments(): Promise<CommentS[]> {
-  //   const userlist = await CommentModel.find({})
-  //   return userlist
-  // }
+  @FieldResolver(() => UserS, { nullable: true })
+  async author(@Root() comment: CommentS): Promise<UserS | null> {
+    const user = await UserModel.findById(comment.authorId).lean()
+    console.log('asdasdtsss', false)
+
+    return user
+      ? new UserS({
+          ...user,
+          id: user._id,
+        })
+      : null
+  }
 }

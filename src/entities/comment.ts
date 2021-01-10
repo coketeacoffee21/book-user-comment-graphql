@@ -8,7 +8,10 @@ export class Comment extends BaseDocument {
   content: string
 
   @Property({ required: true })
-  author: Types.ObjectId
+  authorId: Types.ObjectId
+
+  @Property({ required: true })
+  bookId: Types.ObjectId
 }
 
 export const CommentModel = getOptimisticModel(Comment)

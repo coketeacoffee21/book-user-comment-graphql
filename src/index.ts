@@ -4,13 +4,14 @@ import { ApolloServer } from 'apollo-server'
 import { ObjectId } from 'mongodb'
 import { Container } from 'typedi'
 import * as path from 'path'
-import { buildSchema } from 'type-graphql'
+import { buildSchema, registerEnumType } from 'type-graphql'
 
 import { User } from './entities/user'
 import { ObjectIdScalar } from './scalar'
 import { UserResolver, BookResolver, CommentResolver } from './resolvers'
 import { seedDatabase } from './helper'
 import { mongoose } from '@typegoose/typegoose'
+import * as enums from './enum'
 
 export interface Context {
   user: User
@@ -19,9 +20,16 @@ export interface Context {
 const MONGO_DB_URL = 'mongodb://localhost:27017/type-graphql'
 
 async function bootstrap() {
+  Object.keys(enums).forEach(enumKey =>
+    registerEnumType((enums as any)[enumKey], {
+      name: enumKey,
+      description: '',
+    }),
+  )
   try {
     await mongoose.connect(MONGO_DB_URL)
-    const defaultUser = await seedDatabase()
+    // await mongoose.connection.db.dropDatabase()
+    // const defaultUser = await seedDatabase()
     // build TypeGraphQL executable schema
     const schema = await buildSchema({
       resolvers: [UserResolver, BookResolver, CommentResolver],

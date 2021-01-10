@@ -1,3 +1,4 @@
+import { Types } from 'mongoose'
 import { ID, Field, ObjectType } from 'type-graphql'
 
 @ObjectType()
@@ -8,10 +9,11 @@ export class Comment {
   @Field()
   content: string
 
-  @Field()
-  author: string
+  authorId: Types.ObjectId
 
-  constructor(private convertible: Record<keyof Comment, Comment[keyof Comment]>) {
+  bookId: Types.ObjectId
+
+  constructor(private convertible: Readonly<Comment>) {
     Object.assign(this, convertible)
   }
 }
