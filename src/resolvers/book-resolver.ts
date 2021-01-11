@@ -1,8 +1,9 @@
 import { Arg, FieldResolver, Int, Query, Resolver, Root } from 'type-graphql'
-import { BookModel, CommentModel, UserModel } from '../entities'
+import { BookModel, CommentModel, UserEntity, UserModel } from '../entities'
 import { Book, Comment, User } from '../schemas/'
 import { SORT_BY, SORT_ORDER } from '../enum'
 import { userEntityToGraphQL } from '../mappers'
+import { plainToClass } from 'class-transformer'
 
 function notNullorUndefined(it: any) {
   return it !== null && it !== undefined
@@ -69,7 +70,7 @@ export class BookResolver {
   @FieldResolver(() => User, { nullable: true })
   async author(@Root() book: Book): Promise<User | null> {
     const user = await UserModel.findById(book.authorId).lean()
-    return user?.transform(userEntityToGraphQL()) ?? null
+    return user ? plainToClass(UserEntity, user).transform(userEntityToGraphQL()) : null
   }
 
   @FieldResolver(() => [Comment]!)
