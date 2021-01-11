@@ -1,7 +1,7 @@
 import { prop as Property } from '@typegoose/typegoose'
 import { Types } from 'mongoose'
 import { getOptimisticModel } from '../core'
-import { BaseDocument } from '../interfaces/BaseDocument'
+import { BaseDocument } from '../interfaces/base-document'
 
 export class BookEntity extends BaseDocument {
   @Property({ required: true })
