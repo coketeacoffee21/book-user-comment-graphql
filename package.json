@@ -28,6 +28,7 @@
     "@types/mongoose": "^5.10.3",
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-prettier": "^3.3.1",
+    "object-sizeof": "^1.6.1",
     "prettier": "^2.2.1"
   }
 }

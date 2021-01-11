@@ -1,11 +1,15 @@
-import { EntityConverter } from '../interfaces/BaseDocument'
+import { EntityConverter } from '.'
 import { UserEntity } from '../entities'
 import { User } from '../schemas'
 
-export function userEntityToGraphQL(): EntityConverter<UserEntity, User> {
-  return (user: UserEntity) =>
-    new User({
-      ...user,
-      id: user._id,
-    })
+type UserEntityPojoOrNull = Record<keyof UserEntity, UserEntity[keyof UserEntity]> | null
+
+export function toUserGQL(): EntityConverter<UserEntityPojoOrNull, User | null> {
+  return (user: UserEntityPojoOrNull) =>
+    user
+      ? new User({
+          ...user,
+          id: user._id,
+        })
+      : null
 }
