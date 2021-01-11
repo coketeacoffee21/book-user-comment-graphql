@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "compile": "tsc",
+    "start": "node dist/index.js"
+  },
   "dependencies": {
     "@typegoose/typegoose": "^7.4.6",
     "@typescript-eslint/eslint-plugin": "^4.12.0",
