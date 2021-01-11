@@ -1,7 +1,8 @@
-import { Resolver, Query, Arg, FieldResolver, Root, Int } from 'type-graphql'
-import { UserModel, BookModel, CommentModel } from '../entities'
-import { Book, User, Comment } from '../schemas/'
+import { Arg, FieldResolver, Int, Query, Resolver, Root } from 'type-graphql'
+import { BookModel, CommentModel, UserModel } from '../entities'
+import { Book, Comment, User } from '../schemas/'
 import { SORT_BY, SORT_ORDER } from '../enum'
+import { userEntityToGraphQL } from '../mappers'
 
 function notNullorUndefined(it: any) {
   return it !== null && it !== undefined
@@ -68,12 +69,7 @@ export class BookResolver {
   @FieldResolver(() => User, { nullable: true })
   async author(@Root() book: Book): Promise<User | null> {
     const user = await UserModel.findById(book.authorId).lean()
-    return user
-      ? new User({
-          ...user,
-          id: user._id,
-        })
-      : null
+    return user?.transform(userEntityToGraphQL()) ?? null
   }
 
   @FieldResolver(() => [Comment]!)
