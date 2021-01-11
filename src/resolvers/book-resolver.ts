@@ -1,7 +1,8 @@
-import { Resolver, Query, Arg, FieldResolver, Root, Int } from 'type-graphql'
-import { UserModel, BookModel, CommentModel } from '../entities'
-import { Book, User, Comment } from '../schemas/'
+import { Arg, FieldResolver, Int, Query, Resolver, Root } from 'type-graphql'
+import { BookModel, CommentEntity, CommentModel, UserEntity, UserModel } from '../entities'
+import { Book, Comment, User } from '../schemas/'
 import { SORT_BY, SORT_ORDER } from '../enum'
+import { EntitySchemaMapper, toBookGQL, toCommentGQL, toUserGQL } from '../mappers'
 
 function notNullorUndefined(it: any) {
   return it !== null && it !== undefined
@@ -47,39 +48,25 @@ export class BookResolver {
       .skip(skip)
       .limit(limit)
       .lean()
-
-    console.log('books', books)
-
-    return books.map(it => new Book({ ...it, id: it._id }))
+    return books.map(it => EntitySchemaMapper.from(it, toBookGQL()) as Book)
   }
 
   @Query(() => Book, { nullable: true })
   async getBook(@Arg('id') id: string): Promise<Book | null> {
-    const bookC = await BookModel.findById(id).lean()
-    const books = bookC
-      ? new Book({
-          ...bookC,
-          id: bookC._id,
-        })
-      : null
-    return books
+    const book = await BookModel.findById(id).lean()
+    return EntitySchemaMapper.from(book, toBookGQL())
   }
 
   @FieldResolver(() => User, { nullable: true })
   async author(@Root() book: Book): Promise<User | null> {
     const user = await UserModel.findById(book.authorId).lean()
-    return user
-      ? new User({
-          ...user,
-          id: user._id,
-        })
-      : null
+    return EntitySchemaMapper.from(user, toUserGQL())
   }
 
   @FieldResolver(() => [Comment]!)
   async comments(@Root() book: Book): Promise<Comment[]> {
     const comments = await CommentModel.find({ bookId: book.id }).lean()
-    return comments.map(it => new Comment({ ...it, id: it._id }))
+    return comments.map(it => EntitySchemaMapper.from(it, toCommentGQL()) as Comment)
   }
 
   @FieldResolver(() => Int)
